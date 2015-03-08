@@ -9,7 +9,7 @@ Simple-chat menerapkan _socket programming_. Ada dua komponen utama yaitu server
 * Server menerima dan mengirimkan pesan ke client yang dituju, dan
 * Pesan di tampilkan.
 
-# Hal yang harus dikerjakan
+## Hal yang harus dikerjakan
 Daftar hal yang harus dikerjakan saat ini, antara lain:
 - [x] Pendefinisian protokol/prosedur
 - [ ] Pembuatan chat-server
@@ -17,7 +17,7 @@ Daftar hal yang harus dikerjakan saat ini, antara lain:
 - [ ] Uji coba
 - [ ] Dokumentasi dan diskusi
 
-# Kontributor
+## Kontributor
 Adapun kontributor yang ikut berkontribusi dalam pengerjaan program ini,
 * [Dimas Riska Hadi](https://github.com/dimasdevo)
 * [Andrias Meisyal Y](https://github.com/meisyal)
