@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package kijchat;
+import java.net.*;
+import java.io.*;
 
 /**
  *
@@ -11,6 +13,12 @@ package kijchat;
  */
 public class FrameKIJChat extends javax.swing.JFrame {
 
+    boolean isConnected = false;
+    String username, serverIP = "127.0.0.1";    // set server IP
+    Socket sock;
+    int Port =  2121;                           // set client port
+    BufferedReader reader;
+    PrintWriter writer;
     /**
      * Creates new form FrameKIJChat
      */
@@ -59,11 +67,15 @@ public class FrameKIJChat extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel2.setText("Friend Conversation");
 
+        chatTextArea.setEditable(false);
         chatTextArea.setColumns(20);
+        chatTextArea.setLineWrap(true);
         chatTextArea.setRows(5);
         jScrollPane1.setViewportView(chatTextArea);
 
+        onlineTextArea.setEditable(false);
         onlineTextArea.setColumns(20);
+        onlineTextArea.setLineWrap(true);
         onlineTextArea.setRows(5);
         jScrollPane2.setViewportView(onlineTextArea);
 
@@ -142,6 +154,23 @@ public class FrameKIJChat extends javax.swing.JFrame {
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         // TODO add your handling code here:
+        if(isConnected == false){
+            username=usernameField.getText();
+            usernameField.setEditable(false);
+            
+            try{
+                sock = new Socket(serverIP, Port);
+                InputStreamReader streamreader = new InputStreamReader(sock.getInputStream());
+                reader = new BufferedReader(streamreader);
+                writer = new PrintWriter(sock.getOutputStream());
+                writer.println(username+":has connected.:Connect");
+                writer.flush();
+                isConnected = true;
+            }catch(Exception ex){
+                chatTextArea.append("Cannot connect!. Try Again \n");
+                usernameField.setEditable(true);
+            }
+        }
     }//GEN-LAST:event_connectButtonActionPerformed
 
     /**
