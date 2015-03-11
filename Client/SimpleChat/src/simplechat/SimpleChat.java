@@ -3,20 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kijchat;
+package simplechat;
+
+
 
 /**
  *
  * @author dimas
  */
-public class KIJChat {
+public class SimpleChat {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new FrameKIJChat().setVisible(true);
+        new FrameSimpleChat().setVisible(true);
     }
     
 }
