@@ -1,0 +1,15 @@
+Protokol
+
+=======================
+1. Conn = Connected
+2. Dcon = Disconnected
+3. Send
+4. Done
+5. List <belum>
+
+========================
+1. Conn || Text || username
+2. Dcon ||
+3. Send || To || sender || Text
+4. Done || 
+5. List <belum>

@@ -15,7 +15,7 @@ import java.util.*;
 public class FrameKIJChat extends javax.swing.JFrame {
 
     boolean isConnected = false;
-    String username, computername, serverIP = "10.151.34.156";    // set server IP
+    String username, computername, serverIP = "127.0.0.1";    // set server IP
     Socket sock;
     int Port =  2012;                           // set client port
     BufferedReader reader;
@@ -32,7 +32,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
         
         public void run(){
             String data[];
-            String stream, connect = "Con", done = "Done";
+            String stream, connect = "Conn", done = "Done", disconnect="Dcon", chat="Chat";
             try{
                 while((stream = reader.readLine())!=null){
                     data = stream.split(":");
@@ -43,6 +43,11 @@ public class FrameKIJChat extends javax.swing.JFrame {
                         onlineTextArea.setText("");
                         writeUsers();
                         userList.clear();
+                    }else if(data[0].equals(disconnect)){
+                        userRemove(data[1]);
+                    }else if(data[0].equals(chat)){
+                        chatTextArea.append(data[2]+":"+data[3]+"\n");
+                        chatTextArea.setCaretPosition(chatTextArea.getDocument().getLength());
                     }
                 }
             }catch(Exception ex){
@@ -69,6 +74,32 @@ public class FrameKIJChat extends javax.swing.JFrame {
             onlineTextArea.append(token + "\n");
         }
     }
+    
+    public void sendDisconnect(){
+        try{
+            writer.println("Dcon:"+username);
+            writer.flush();
+        }catch(Exception ex){
+            chatTextArea.append("Tidak bisa mengirimkan Pesan Disconnect. \n");
+        }
+    }
+    
+    public void Disconnect(){
+        try{
+            chatTextArea.append("Disconnected.\n");
+            sock.close();            
+        }catch(Exception ex){
+            chatTextArea.append("Gagal Untuk Disconnect. \n");
+        }
+        isConnected=false;
+        usernameField.setEditable(true);
+        onlineTextArea.setText("");
+    }
+    
+    public void userRemove(String data){
+        chatTextArea.append(data+" telah disconnected. \n");
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -106,6 +137,11 @@ public class FrameKIJChat extends javax.swing.JFrame {
         });
 
         disconnectButton.setText("Disconnect");
+        disconnectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disconnectButtonActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel2.setText("Friend Conversation");
@@ -131,6 +167,11 @@ public class FrameKIJChat extends javax.swing.JFrame {
 
         sendButton.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         sendButton.setText("Send");
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,16 +251,51 @@ public class FrameKIJChat extends javax.swing.JFrame {
                 InputStreamReader streamreader = new InputStreamReader(sock.getInputStream());
                 reader = new BufferedReader(streamreader);
                 writer = new PrintWriter(sock.getOutputStream());
-                writer.println("Con:"+username+":has connected.:"+computername);
+                writer.println("Conn:"+username+":has connected.:"+computername);
                 writer.flush();
                 isConnected = true;
                 ListenThread();
             }catch(Exception ex){
-                chatTextArea.append("Cannot connect!. Try Again \n");
+                chatTextArea.append("Tidak bisa terhubung. Coba Lagi \n");
                 usernameField.setEditable(true);
             }
         }
     }//GEN-LAST:event_connectButtonActionPerformed
+
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        // TODO add your handling code here:
+        String nothing="";
+        if((sendTextArea.getText()).equals(nothing) && (sendUserArea.getText()).equals(nothing)){
+            sendTextArea.setText(nothing);
+            sendUserArea.setText(nothing);
+            sendTextArea.requestFocus();
+            sendUserArea.requestFocus();
+        }
+        else{
+            try{
+                writer.println("Chat:"+sendUserArea.getText()+":"+username+":"+sendTextArea.getText());
+                writer.flush();
+                chatTextArea.append(username+":"+sendTextArea.getText()+"\n");
+            }catch(Exception ex){
+                chatTextArea.append("Pesan tidak dikirimkan. \n");
+            }
+        }
+        sendTextArea.setText(nothing);
+        sendUserArea.setText(nothing);
+        sendTextArea.requestFocus();
+        sendUserArea.requestFocus();
+    }//GEN-LAST:event_sendButtonActionPerformed
+
+    private void disconnectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectButtonActionPerformed
+        // TODO add your handling code here:
+        if(isConnected==true){
+            sendDisconnect();
+            Disconnect();
+        }
+        else{
+            chatTextArea.append("Anda belum terhubung. Tidak bisa disconnect. \n");
+        }
+    }//GEN-LAST:event_disconnectButtonActionPerformed
 
     /**
      * @param args the command line arguments
