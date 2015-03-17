@@ -47,7 +47,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
                     }else if(data[0].equals(disconnect)){
                         userRemove(data[1]);
                     }else if(data[0].equals(chat)){
-                        chatTextArea.append(data[2]+":"+data[3]+"\n");
+                        chatTextArea.append(data[1]+":"+data[3]+"\n");
                         chatTextArea.setCaretPosition(chatTextArea.getDocument().getLength());
                     }
                 }
@@ -298,7 +298,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
         }
         else{
             try{
-                writer.println("SEND:"+sendUserArea.getText()+":"+username+":"+sendTextArea.getText());
+                writer.println("SEND:"+username+":"+sendUserArea.getText()+":"+sendTextArea.getText());
                 writer.flush();
                 chatTextArea.append(username+":"+sendTextArea.getText()+"\n");
             }catch(Exception ex){
