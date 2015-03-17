@@ -15,9 +15,9 @@ import java.util.*;
 public class FrameKIJChat extends javax.swing.JFrame {
 
     boolean isConnected = false;
-    String username, computername, serverIP = "127.0.0.1";    // set server IP
+    String username, computername, serverIP;    // set server IP
     Socket sock;
-    int Port =  2012;                           // set client port
+    int Port =  2015;                           // set client port
     BufferedReader reader;
     PrintWriter writer;
     ArrayList<String> userList = new ArrayList();
@@ -32,9 +32,10 @@ public class FrameKIJChat extends javax.swing.JFrame {
         
         public void run(){
             String data[];
-            String stream, connect = "Conn", done = "Done", disconnect="Dcon", chat="Chat";
+            String stream, connect = "CONN", done = "DONE", disconnect="DCON", chat="SEND";
             try{
                 while((stream = reader.readLine())!=null){
+                    chatTextArea.append(stream);
                     data = stream.split(":");
                     if(data[0].equals(connect)){
                         chatTextArea.removeAll();
@@ -77,7 +78,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
     
     public void sendDisconnect(){
         try{
-            writer.println("Dcon:"+username);
+            writer.println("DCON:"+username);
             writer.flush();
         }catch(Exception ex){
             chatTextArea.append("Tidak bisa mengirimkan Pesan Disconnect. \n");
@@ -94,6 +95,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
         isConnected=false;
         usernameField.setEditable(true);
         onlineTextArea.setText("");
+        serverField.setEditable(true);
     }
     
     public void userRemove(String data){
@@ -123,6 +125,8 @@ public class FrameKIJChat extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         sendTextArea = new javax.swing.JTextArea();
         sendButton = new javax.swing.JButton();
+        serverField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -173,6 +177,14 @@ public class FrameKIJChat extends javax.swing.JFrame {
             }
         });
 
+        serverField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                serverFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("IP Server");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -180,47 +192,58 @@ public class FrameKIJChat extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sendUserArea))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(serverField)
+                            .addComponent(usernameField, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(connectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(disconnectButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel2)
-                        .addGap(32, 32, 32))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sendUserArea))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(6, 6, 6)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(28, 28, 28))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(connectButton)
-                    .addComponent(disconnectButton)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(serverField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(connectButton)
+                            .addComponent(disconnectButton))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
@@ -241,6 +264,8 @@ public class FrameKIJChat extends javax.swing.JFrame {
         if(isConnected == false){
             username=usernameField.getText();
             usernameField.setEditable(false);
+            serverIP=serverField.getText();
+            serverField.setEditable(false);
             try{
                 computername=Inet4Address.getLocalHost().getHostAddress();
             }catch(Exception ex){
@@ -251,7 +276,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
                 InputStreamReader streamreader = new InputStreamReader(sock.getInputStream());
                 reader = new BufferedReader(streamreader);
                 writer = new PrintWriter(sock.getOutputStream());
-                writer.println("Conn:"+username+":has connected.:"+computername);
+                writer.println("CONN:"+username+":");
                 writer.flush();
                 isConnected = true;
                 ListenThread();
@@ -273,7 +298,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
         }
         else{
             try{
-                writer.println("Chat:"+sendUserArea.getText()+":"+username+":"+sendTextArea.getText());
+                writer.println("SEND:"+sendUserArea.getText()+":"+username+":"+sendTextArea.getText());
                 writer.flush();
                 chatTextArea.append(username+":"+sendTextArea.getText()+"\n");
             }catch(Exception ex){
@@ -296,6 +321,10 @@ public class FrameKIJChat extends javax.swing.JFrame {
             chatTextArea.append("Anda belum terhubung. Tidak bisa disconnect. \n");
         }
     }//GEN-LAST:event_disconnectButtonActionPerformed
+
+    private void serverFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_serverFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -339,6 +368,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -346,6 +376,7 @@ public class FrameKIJChat extends javax.swing.JFrame {
     private javax.swing.JButton sendButton;
     private javax.swing.JTextArea sendTextArea;
     private javax.swing.JTextField sendUserArea;
+    private javax.swing.JTextField serverField;
     private javax.swing.JTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }
