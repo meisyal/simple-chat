@@ -16,7 +16,11 @@ public class KIJChat {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new FrameKIJChat().setVisible(true);
+        new FormLogin().setVisible(true);
+    }
+    
+    public void hello(){
+    
     }
     
 }
