@@ -65,7 +65,7 @@ public class RSA {
         e1= new BigInteger(e);
         N1= new BigInteger(N);
         for(i=0; i<Plain.length(); i++){
-            tempC=Plain.charAt(0);
+            tempC=Plain.charAt(i);
             tempI=(int)tempC;
             temp1= new BigInteger(String.valueOf(tempI));
             encrypt=encrypt.add(temp1.multiply(satuduatujuh.pow(i)));
@@ -82,8 +82,27 @@ public class RSA {
         d1 = new BigInteger(d);
         N1 = new BigInteger(N);
         Plain = Cipher1.modPow(d1, N1);
+        String Plain1="", Plain2="";
+        int counter=0;
+        BigInteger temp1,temp2,temp3;
+        while(Plain.compareTo(satuduatujuh)>0){
+            temp1=satuduatujuh.pow(counter);
+            temp2=Plain.divide(temp1);
+            counter++;
+            if(temp2.compareTo(satuduatujuh)==-1){
+                tempI=temp2.intValue();
+                temp3=new BigInteger(Integer.toString(tempI));
+                Plain1=Plain1.concat(Character.toString((char)tempI));
+                Plain=Plain.subtract(temp1.multiply(temp3));
+                counter=0;
+            }
+        }
+        Plain1=Plain1.concat(Character.toString((char)Plain.intValue()));
+        for(i=0; i<Plain1.length();i++){
+            Plain2=Plain2.concat(Character.toString(Plain1.charAt(Plain1.length()-i-1)));
+        }
         
-        return 
+        return Plain2;
     }
     
     public BigInteger getprime(){
