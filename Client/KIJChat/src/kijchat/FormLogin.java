@@ -144,7 +144,7 @@ public class FormLogin extends javax.swing.JFrame {
         if(!IP.isEmpty() && Port>0 && !username.isEmpty()){
             frameku=new KIJChat2();
             frameku.create_socket(IP, Port, username);
-            new NewJFrame(IP,Port, username).setVisible(true);
+            //new NewJFrame(IP,Port, username).setVisible(true);
             this.setVisible(false);
         }
         else{

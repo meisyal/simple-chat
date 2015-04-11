@@ -18,15 +18,22 @@ public class KIJChatting extends javax.swing.JFrame {
     /**
      * Creates new form KIJChatting
      */
+    RSA myRSA1=new RSA();
+    RC4 myRC41=new RC4();
+    String DefaultKey="allhamdulilah";
+    Beranda Menu_Utama;
     Socket sock;
     BufferedReader reader;
     PrintWriter writer;
-    String Recepient, Sender;
-    public KIJChatting(Socket sock, BufferedReader reader, PrintWriter writer, String Recepient, String Sender) {
+    String Recepient, Sender, Cipher, Key, e, n, PublicKey;
+    public KIJChatting(Socket sock, BufferedReader reader, PrintWriter writer, String Recepient, String Sender, Beranda Menu_Utama, String PublicKey) {
         this.sock=sock;
         this.reader=reader;
         this.writer=writer;
         this.Sender=Sender;
+        this.Recepient=Recepient;
+        this.Menu_Utama=Menu_Utama;
+        this.PublicKey=PublicKey;
         initComponents();
     }
 
@@ -55,6 +62,7 @@ public class KIJChatting extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Agent Orange", 0, 18)); // NOI18N
         jLabel1.setText("private chatting");
 
+        ChatArea.setEditable(false);
         ChatArea.setColumns(20);
         ChatArea.setRows(5);
         jScrollPane1.setViewportView(ChatArea);
@@ -72,6 +80,11 @@ public class KIJChatting extends javax.swing.JFrame {
 
         CloseButton.setFont(new java.awt.Font("Agent Orange", 0, 14)); // NOI18N
         CloseButton.setText("close");
+        CloseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,9 +141,19 @@ public class KIJChatting extends javax.swing.JFrame {
         }
         else{
             try{
-                writer.println("SEND:"+Sender+":"+Recepient+":"+SendField.getText());
+                //ChatArea.append("0\n");
+                e=myRSA1.Get_ed_RSA(PublicKey);
+                //ChatArea.append("1\n");
+                n=myRSA1.Get_N_RSA(PublicKey);
+                //ChatArea.append("2\n");
+                Key=myRSA1.Enkripsi_RSA(DefaultKey, e, n);
+                //ChatArea.append("3\n");
+                Cipher=myRC41.Enkripsi(SendField.getText(), DefaultKey);
+                ChatArea.append("Sender"+e+":"+n+":"+Key+":"+Cipher+":\n");
+                writer.println("SEND:"+Sender+":"+Recepient+":"+Cipher+":"+Key);
                 writer.flush();
                 ChatArea.append(Sender+":"+SendField.getText()+"\n");
+                Menu_Utama.ShowActivity("SEND:"+Sender+":"+Recepient+":"+SendField.getText());
             }catch(Exception ex){
                 ChatArea.append("Pesan tidak dikirimkan. \n");
             }
@@ -138,6 +161,11 @@ public class KIJChatting extends javax.swing.JFrame {
         SendField.setText(nothing);
         SendField.requestFocus();
     }//GEN-LAST:event_sendButtonActionPerformed
+
+    private void CloseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseButtonActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_CloseButtonActionPerformed
 
     /**
      * @param args the command line arguments

@@ -14,13 +14,15 @@ import java.util.*;
  * @author dimas
  */
 public class KIJChat2 {
+    RSA myRSA=new RSA();
+    RC4 myRC4= new RC4();
     Socket sock;
-    String IP;
-    String username;
     int Port;
     BufferedReader reader;
     PrintWriter writer;
     ArrayList<String> userList = new ArrayList();
+    ArrayList<String> PublicKeyList=new ArrayList();
+    String myPrivateKey, myPublicKey="", RSAKey, IP,username;
     Beranda myBeranda;  
     public void create_socket(String IP, int Port, String username){
         this.Port=Port;
@@ -31,13 +33,16 @@ public class KIJChat2 {
                 InputStreamReader streamreader = new InputStreamReader(sock.getInputStream());
                 reader = new BufferedReader(streamreader);
                 writer = new PrintWriter(sock.getOutputStream());
-                writer.println("CONN:"+username+":");
+                RSAKey=myRSA.RSA();
+                myPrivateKey=myRSA.PrivateKey(RSAKey);
+                myPublicKey=myRSA.PublicKey(RSAKey);
+                writer.println("CONN:"+username+":"+myPublicKey+":");
                 writer.flush();
                 myBeranda = new Beranda(sock,reader,writer,username);
                 myBeranda.setVisible(true);
                 ListenThread();
             }catch(Exception ex){
-                //new FormLogin().setVisible(true);
+                new FormLogin().setVisible(true);
             }
     } 
     public class IncomingReader implements Runnable{
@@ -46,13 +51,14 @@ public class KIJChat2 {
             String data[];
             String stream, connect = "CONN", list = "LIST", disconnect="DCON", chat="SEND";
             try{
-                while((stream = reader.readLine())!=null){
-                    
-                    myBeranda.ShowActivity(stream);
+                
+                while((stream = reader.readLine())!=null){                    
+                    myBeranda.ShowActivity(stream+"\n");
                     data = stream.split(":");
                     if(data[0].equals(connect)){
                         myBeranda.RemoveAllActivity();
                         userAdd(data[1]);
+                        PublicKeyAdd(data[2],data[3]);
                     }else if(data[0].equals(list)){
                         myBeranda.ClearListUser();
                         writeUsers();
@@ -60,11 +66,13 @@ public class KIJChat2 {
                     }else if(data[0].equals(disconnect)){
                         userRemove(data[1]);
                     }else if(data[0].equals(chat)){
-                        myBeranda.SendTo(data[1], data[3]);
+                        String Key=myRSA.Deskripsi_RSA(data[4], myRSA.Get_ed_RSA(myPrivateKey), myRSA.Get_N_RSA(myPrivateKey));
+                        String Plain=myRC4.Deskripsi(data[3], Key);
+                        myBeranda.SendTo(data[1], Plain);
                     }
                 }
             }catch(Exception ex){
-                
+                myBeranda.ShowActivity("Gagal Menerima Pesan \n");
             }
         }
         
@@ -77,6 +85,12 @@ public class KIJChat2 {
     
     public void userAdd(String data){
         userList.add(data);
+        myBeranda.adduser(data);
+    }
+    
+    public void PublicKeyAdd(String e, String n){
+        PublicKeyList.add(e+":"+n);
+        myBeranda.addpublickey(e+":"+n);
     }
     
     public void writeUsers(){

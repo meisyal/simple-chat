@@ -17,8 +17,10 @@ public class Beranda extends javax.swing.JFrame {
 
     String text, username;
     KIJChatting User_Chat, tempKIJ;
-    ArrayList<KIJChatting>Chat;
-    ArrayList<String>User;
+    ArrayList<KIJChatting>Chat=new ArrayList();
+    ArrayList<String>User=new ArrayList();
+    ArrayList<String>User_name=new ArrayList();
+    ArrayList<String>Public_Key=new ArrayList();
     int counter=0, i;
     Socket sock;
     BufferedReader reader;
@@ -44,11 +46,11 @@ public class Beranda extends javax.swing.JFrame {
     }
     
     public void AddListUser(String user){
-        ListUser.add(user);
+        ListUser1.add(user);
     }
     
     public void ClearListUser(){
-        ListUser.removeAll();
+        ListUser1.removeAll();
     }
     
     public void SendTo(String To, String Text){
@@ -59,6 +61,22 @@ public class Beranda extends javax.swing.JFrame {
                 temp2.receive(To, Text);
             }
         }
+    }
+    
+    public void adduser(String user){
+        User_name.add(user);
+    }
+    
+    public void addpublickey(String publickey){
+        Public_Key.add(publickey);
+    }
+    
+    public void removealluser(){
+        
+    }
+    
+    public void removeallpublic(){
+        
     }
     
     public void sendDisconnect(){
@@ -92,13 +110,13 @@ public class Beranda extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jLabel1 = new javax.swing.JLabel();
-        ListUser = new java.awt.List();
         jLabel2 = new javax.swing.JLabel();
         closeButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         ActivityTextArea = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         chatButton = new javax.swing.JButton();
+        ListUser1 = new java.awt.List();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,14 +169,15 @@ public class Beranda extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(184, 184, 184)
                         .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(ListUser, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                         .addComponent(chatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(67, 67, 67))))
+                        .addGap(67, 67, 67))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(ListUser1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,9 +190,9 @@ public class Beranda extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
-                    .addComponent(ListUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(ListUser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -193,10 +212,19 @@ public class Beranda extends javax.swing.JFrame {
 
     private void chatButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chatButtonActionPerformed
         // TODO add your handling code here:
-        tempKIJ=new KIJChatting(sock,reader,writer,ListUser.getSelectedItem(),username);
-        Chat.add(counter,tempKIJ);
-        User.add(counter,ListUser.getSelectedItem());
+        String PublicKey="";
+        ActivityTextArea.append(ListUser1.getSelectedItem()+"\n");
+        for(i=0;i<User_name.size();i++){
+            ActivityTextArea.append("LIST:"+User_name.get(i)+"\n");
+            if(ListUser1.getSelectedItem().equals(User_name.get(i))){
+                PublicKey=Public_Key.get(i);
+                ActivityTextArea.append("Public:"+PublicKey+"\n");
+            }
+        }
+        tempKIJ=new KIJChatting(sock,reader,writer,ListUser1.getSelectedItem(),username,this, PublicKey);
         tempKIJ.setVisible(true);
+        Chat.add(tempKIJ);
+        User.add(ListUser1.getSelectedItem());
         counter++;
     }//GEN-LAST:event_chatButtonActionPerformed
 
@@ -236,7 +264,7 @@ public class Beranda extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea ActivityTextArea;
-    private java.awt.List ListUser;
+    private java.awt.List ListUser1;
     private javax.swing.JButton chatButton;
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel jLabel1;

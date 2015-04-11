@@ -40,22 +40,30 @@ public class RSA {
         return Key;
     }
     
-    public String Get_e_RSA(String Key){
+    public String Get_ed_RSA(String Key){
         String data[];
         data=Key.split(":");
         return data[0];
     }
     
-    public String Get_d_RSA(String Key){
+    public String Get_N_RSA(String Key){
         String data[];
         data=Key.split(":");
         return data[1];        
     }
     
-    public String Get_N_RSA(String Key){
-        String data[];
+    public String PrivateKey(String Key){
+        String data[], data1;
         data=Key.split(":");
-        return data[2];
+        data1=data[1].concat(":"+data[2]);
+        return data1;
+    }
+    
+    public String PublicKey(String Key){
+        String data[], data1;
+        data=Key.split(":");
+        data1=data[0].concat(":"+data[2]);
+        return data1;
     }
     
     public String Enkripsi_RSA(String Plain, String e, String N){
