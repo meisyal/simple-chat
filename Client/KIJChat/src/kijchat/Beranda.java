@@ -35,6 +35,7 @@ public class Beranda extends javax.swing.JFrame {
         this.writer=writer;
         this.username=username;
         initComponents();
+        name.setText(username);
     }
     
     public void ShowActivity(String text){
@@ -81,7 +82,7 @@ public class Beranda extends javax.swing.JFrame {
     
     public void sendDisconnect(){
         try{
-            writer.println("DCON:"+username);
+            writer.println("DCON:"+username+":");
             writer.flush();
         }catch(Exception ex){
             ActivityTextArea.append("Tidak bisa mengirimkan Pesan Disconnect. \n");
@@ -117,6 +118,8 @@ public class Beranda extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         chatButton = new javax.swing.JButton();
         ListUser1 = new java.awt.List();
+        jLabel4 = new javax.swing.JLabel();
+        name = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,6 +150,8 @@ public class Beranda extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Login As:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,7 +163,11 @@ public class Beranda extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(96, 96, 96))
             .addGroup(layout.createSequentialGroup()
-                .addGap(172, 172, 172)
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(name)
+                .addGap(84, 84, 84)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -182,8 +191,15 @@ public class Beranda extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(name))))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -270,7 +286,9 @@ public class Beranda extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel name;
     // End of variables declaration//GEN-END:variables
 }

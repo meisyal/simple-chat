@@ -35,6 +35,7 @@ public class KIJChatting extends javax.swing.JFrame {
         this.Menu_Utama=Menu_Utama;
         this.PublicKey=PublicKey;
         initComponents();
+        withLabel.setText(Recepient);        
     }
 
     public void receive(String To, String Text){
@@ -150,7 +151,7 @@ public class KIJChatting extends javax.swing.JFrame {
                 //ChatArea.append("3\n");
                 Cipher=myRC41.Enkripsi(SendField.getText(), DefaultKey);
                 ChatArea.append("Sender"+e+":"+n+":"+Key+":"+Cipher+":\n");
-                writer.println("SEND:"+Sender+":"+Recepient+":"+Cipher+":"+Key);
+                writer.println("SEND:"+Sender+":"+Recepient+":"+Cipher+":"+Key+":");
                 writer.flush();
                 ChatArea.append(Sender+":"+SendField.getText()+"\n");
                 Menu_Utama.ShowActivity("SEND:"+Sender+":"+Recepient+":"+SendField.getText());
