@@ -259,34 +259,6 @@ public class FrameKIJChat extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        // TODO add your handling code here:
-        if(isConnected == false){
-            username=usernameField.getText();
-            usernameField.setEditable(false);
-            serverIP=serverField.getText();
-            serverField.setEditable(false);
-            try{
-                computername=Inet4Address.getLocalHost().getHostAddress();
-            }catch(Exception ex){
-                computername="1235";
-            }
-            try{
-                sock = new Socket(serverIP, Port);
-                InputStreamReader streamreader = new InputStreamReader(sock.getInputStream());
-                reader = new BufferedReader(streamreader);
-                writer = new PrintWriter(sock.getOutputStream());
-                writer.println("CONN:"+username+":");
-                writer.flush();
-                isConnected = true;
-                ListenThread();
-            }catch(Exception ex){
-                chatTextArea.append("Tidak bisa terhubung. Coba Lagi \n");
-                usernameField.setEditable(true);
-            }
-        }
-    }//GEN-LAST:event_connectButtonActionPerformed
-
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         // TODO add your handling code here:
         String nothing="";
@@ -321,6 +293,34 @@ public class FrameKIJChat extends javax.swing.JFrame {
             chatTextArea.append("Anda belum terhubung. Tidak bisa disconnect. \n");
         }
     }//GEN-LAST:event_disconnectButtonActionPerformed
+
+    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
+        // TODO add your handling code here:
+        if(isConnected == false){
+            username=usernameField.getText();
+            usernameField.setEditable(false);
+            serverIP=serverField.getText();
+            serverField.setEditable(false);
+            try{
+                computername=Inet4Address.getLocalHost().getHostAddress();
+            }catch(Exception ex){
+                computername="1235";
+            }
+            try{
+                sock = new Socket(serverIP, Port);
+                InputStreamReader streamreader = new InputStreamReader(sock.getInputStream());
+                reader = new BufferedReader(streamreader);
+                writer = new PrintWriter(sock.getOutputStream());
+                writer.println("CONN:"+username+":");
+                writer.flush();
+                isConnected = true;
+                ListenThread();
+            }catch(Exception ex){
+                chatTextArea.append("Tidak bisa terhubung. Coba Lagi \n");
+                usernameField.setEditable(true);
+            }
+        }
+    }//GEN-LAST:event_connectButtonActionPerformed
 
     private void serverFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverFieldActionPerformed
         // TODO add your handling code here:
