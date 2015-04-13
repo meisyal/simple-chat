@@ -60,10 +60,10 @@ public class RC4 {
         */
         //------------------------
         String RC4Text="";
-        int []SVector = new int[257];
-        int []TVector = new int[257];
-        int []Cipher_temp = new int[257];
-        int []k = new int[257];
+        int []SVector = new int[256];
+        int []TVector = new int[256];
+        int []Cipher_temp = new int[256];
+        int []k = new int[256];
         
         //------------------------
         j=0;
