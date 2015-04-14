@@ -1,15 +1,8 @@
-Protokol
+Prorokol cient:
 
-=======================
-1. Conn = Connected
-2. Dcon = Disconnected
-3. Send
-4. Done
-5. List <belum>
+1. CONN -> Connect + username + publickey (CONN:<username>:<public(e)>:<public(n)>:) 
+2. LIST -> Meminta daftar pengguna yang online -> Return (LIST:<username>:<public(e)>:<public(n)>:)
+3. DONE -> Flag ketika LIST sudah dikirimkan semua
+4. SEND -> Mengirim pesan ke sala satu pengguna online (SEND:<sender>:<receiver>:<en-messege>:<en-key>:<hashvalue>:)  
+5. DCON -> Disconnect dari server 
 
-========================
-1. Conn || Text || username
-2. Dcon ||
-3. Send || To || sender || Text
-4. Done || 
-5. List <belum>
