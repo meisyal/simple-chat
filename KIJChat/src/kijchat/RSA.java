@@ -67,42 +67,42 @@ public class RSA {
     }
     
     public String Enkripsi_RSA(String Plain, String e, String N){
-        Check_List test=new Check_List();
-        test.setVisible(true);
+        //Check_List test=new Check_List();
+        //test.setVisible(true);
         BigInteger encrypt, satuduatujuh, e1, N1, Chiper, temp1;
         encrypt = new BigInteger("0");
         satuduatujuh = new BigInteger("128");
         e1= new BigInteger(e);
         N1= new BigInteger(N);
-        test.Show("Plain :"+Plain+"\n");
-        test.Show("e :"+e+"\n");
-        test.Show("N :"+N+"\n");
+        //test.Show("Plain :"+Plain+"\n");
+        //test.Show("e :"+e+"\n");
+        //test.Show("N :"+N+"\n");
         for(i=0; i<Plain.length(); i++){
             tempC=Plain.charAt(i);
             tempI=(int)tempC;
             temp1= new BigInteger(String.valueOf(tempI));
             encrypt=encrypt.add(temp1.multiply(satuduatujuh.pow(i)));
         }
-        test.Show("Step1 : Chiper :"+encrypt+"\n");
+        //test.Show("Step1 : Chiper :"+encrypt+"\n");
         Chiper = encrypt.modPow(e1, N1);
-        test.Show("Step2 : Chiper :"+Chiper+"\n");
+        //test.Show("Step2 : Chiper :"+Chiper+"\n");
         return Chiper.toString();
     }
     
     public String Deskripsi_RSA(String Cipher, String d, String N){
-        Check_List test=new Check_List();
-        test.setVisible(true);
+        //Check_List test=new Check_List();
+        //test.setVisible(true);
         BigInteger Cipher1, d1, N1, satuduatujuh, Plain;
-        test.Show("Cipher :"+Cipher+"\n");
-        test.Show("d :"+d+"\n");
-        test.Show("N :"+N+"\n");
+        //test.Show("Cipher :"+Cipher+"\n");
+        //test.Show("d :"+d+"\n");
+        //test.Show("N :"+N+"\n");
         String Plain_text;
         satuduatujuh = new BigInteger("128");
         Cipher1 = new BigInteger(Cipher);
         d1 = new BigInteger(d);
         N1 = new BigInteger(N);
         Plain = Cipher1.modPow(d1, N1);
-        test.Show("Step1 : Plain :"+Plain.toString()+"\n");
+        //test.Show("Step1 : Plain :"+Plain.toString()+"\n");
         String Plain1="", Plain2="";
         int counter=0;
         BigInteger temp1,temp2,temp3;
@@ -119,11 +119,11 @@ public class RSA {
             }
         }
         Plain1=Plain1.concat(Character.toString((char)Plain.intValue()));
-        test.Show("Step2 : Plain :"+Plain1+"\n");
+        //test.Show("Step2 : Plain :"+Plain1+"\n");
         for(i=0; i<Plain1.length();i++){
             Plain2=Plain2.concat(Character.toString(Plain1.charAt(Plain1.length()-i-1)));
         }
-        test.Show("Step3 : Plain :"+Plain2+"\n");        
+        //test.Show("Step3 : Plain :"+Plain2+"\n");        
         return Plain2;
     }
     
