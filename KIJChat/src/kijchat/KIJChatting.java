@@ -20,7 +20,8 @@ public class KIJChatting extends javax.swing.JFrame {
      */
     RSA myRSA1=new RSA();
     RC4 myRC41=new RC4();
-    String DefaultKey="Allhamdulilah";
+    Alpha random_key=new Alpha();
+    String DefaultKey=random_key.randomString(10);
     Beranda Menu_Utama;
     Socket sock;
     BufferedReader reader;
@@ -156,7 +157,7 @@ public class KIJChatting extends javax.swing.JFrame {
                 writer.println("SEND:"+Sender+":"+Recepient+":"+Cipher+":"+Key+":"+Hash+":");
                 writer.flush();
                 ChatArea.append(Sender+":"+SendField.getText()+"\n");
-                Menu_Utama.ShowActivity("SEND FROM ="+Sender+" TO = "+Recepient+" : "+SendField.getText());
+                Menu_Utama.ShowActivity("SEND FROM ="+Sender+" TO = "+Recepient+" : "+SendField.getText()+"\n");
             }catch(Exception ex){
                 ChatArea.append("Pesan tidak dikirimkan. \n");
             }
