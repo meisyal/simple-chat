@@ -70,8 +70,9 @@ public class KIJChat2 {
                         String Key=myRSA.Deskripsi_RSA(data[4], myRSA.Get_ed_RSA(myPrivateKey), myRSA.Get_N_RSA(myPrivateKey));
                         //myBeranda.ShowActivity("Got Message From "+data[1]+"\n");
                         String Plain=myRC4.Deskripsi(data[3], Key);
+                        String Hash1=myRC4.Deskripsi(data[5], Key);
                         String Hash=myRC4.getMD5(Plain);
-                        if(Hash.compareTo(data[5])==0){
+                        if(Hash.compareTo(Hash1)==0){
                             myBeranda.ShowActivity("Got Message From "+data[1]+" \nMessage : "+data[3]+"\nPlain :"+Plain+"\n");
                             myBeranda.SendTo(data[1], Plain);
                         }

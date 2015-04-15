@@ -26,7 +26,7 @@ public class KIJChatting extends javax.swing.JFrame {
     Socket sock;
     BufferedReader reader;
     PrintWriter writer;
-    String Recepient, Sender, Cipher, Key, e, n, PublicKey, Hash;
+    String Recepient, Sender, Cipher, Key, e, n, PublicKey, Hash, Hash_new;
     public KIJChatting(Socket sock, BufferedReader reader, PrintWriter writer, String Recepient, String Sender, Beranda Menu_Utama, String PublicKey) {
         this.sock=sock;
         this.reader=reader;
@@ -152,9 +152,10 @@ public class KIJChatting extends javax.swing.JFrame {
                 //ChatArea.append("3\n");
                 Hash=myRC41.getMD5(SendField.getText());
                 Cipher=myRC41.Enkripsi(SendField.getText(), DefaultKey);
+                Hash_new=myRC41.Enkripsi(Hash, DefaultKey);
                 //ChatArea.append("Sender"+e+":"+n+":"+Key+":"+Cipher+":\n");
                 ChatArea.append("Succesfull Send Message\n");
-                writer.println("SEND:"+Sender+":"+Recepient+":"+Cipher+":"+Key+":"+Hash+":");
+                writer.println("SEND:"+Sender+":"+Recepient+":"+Cipher+":"+Key+":"+Hash_new+":");
                 writer.flush();
                 ChatArea.append(Sender+":"+SendField.getText()+"\n");
                 Menu_Utama.ShowActivity("SEND FROM ="+Sender+" TO = "+Recepient+" : "+SendField.getText()+"\n");
